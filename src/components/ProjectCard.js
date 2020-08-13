@@ -6,13 +6,13 @@ const ProjectCard = (props) => {
     return (
         <Media>
             <Media left href="#">
-                <Media object style={ { minHeight:128, minWidth: 128, maxHeight: 128, maxWidth: 128} } src={image_url} alt="Generic placeholder image"  />
+                <Media object style={ { maxHeight: 64, maxWidth: 64} } className="img-responsive" src={image_url} alt="Generic placeholder image"  />
             </Media>
             <Media body>
-                <Media heading>
+                <Media heading className="text-left">
                     {name}
                 </Media>
-                    {description}
+                <h6 className="text-left">{description}</h6>
             </Media>
         </Media> 
     );
