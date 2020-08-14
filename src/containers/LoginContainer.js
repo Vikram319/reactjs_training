@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import LoginComponent from '../components/LoginComponent'
+import * as yup from 'yup';
 
 const LoginContainer = () => {
     const [username, setUsername] = useState('');
@@ -9,8 +10,14 @@ const LoginContainer = () => {
         console.log(username);
         console.log(password);
     }
+
+    let schema = yup.object().shape({
+        username: yup.string().email().required(),
+        password: yup.string().required(),
+    });
+
     return (
-        <LoginComponent username = { username } password = { password } setUsername = {setUsername} setPassword = {setPassword } logValues = { logValues}/>
+        <LoginComponent username = { username } password = { password } setUsername = {setUsername} setPassword = {setPassword } logValues = { logValues} schema = { schema }/>
     );
 };
 
