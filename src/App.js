@@ -5,7 +5,7 @@ import logo from './logo.svg';
 // import ProductList from './components/ProductList'
 
 import { Button } from 'reactstrap';
-// import ProjectList from './components/ProjectList';
+import ProjectList from './components/ProjectList';
 import LoginContainer from './containers/LoginContainer';
 function App() {
   // console.log(productList)

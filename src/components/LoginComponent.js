@@ -1,41 +1,34 @@
 import React from 'react';
-// import LoginContainer from '../containers/LoginContainer';
 import { CardBody, Container, Row, Col, Card, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
 import PropTypes from 'prop-types';
-let LoginComponent = ({ username, password, setUsername, setPassword, logValues, schema }) => {
+
+let LoginComponent = ({ dispatch, showError, passwordError, usernameError, password, username }) => {
     const setUsernameWrapper = (evt) => {
-        console.log(evt.target.value)
-        setUsername(evt.target.value)
+        dispatch({type: 'setUsername', value: evt.target.value})
     };
     const setPasswordWrapper = (evt) => {
-        setPassword(evt.target.value)
-        console.log(evt.target.value)
+        dispatch({type: 'setPassword', value: evt.target.value})
     };
-    const showError = () => {
-        schema.validate({username: username, password: password}, {abortEarly: false})
-            .catch( (err) => {
-                console.log(err.errors[0]);
-            });
-    }
+    
     return (
         <>
-        <Container>
+        <Container style = {{paddingTop: '25vh', minHeight: '50vh', }}>
             <Row>
-                <Col className="m-auto">
+                <Col sm= {{size:6, offset:3}}>
                     <Card>
                         <CardBody>
                             <Form>
                                 <FormGroup>
                                     <Label for="exampleEmail" value={username} >Email</Label>
-                                    <Input type="email" name="email" id="exampleEmail" onChange={setUsernameWrapper}></Input>
-                                    <FormFeedback>Oh noes! that name is already taken</FormFeedback>
+                                    <Input type="email" name="email" id="exampleEmail" onChange={setUsernameWrapper} invalid = {usernameError !== null }></Input>
+                                    <FormFeedback>{usernameError}</FormFeedback>
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="examplePassword" value={password}>Password</Label>
-                                    <Input type="password" name="password" id="examplePassword" onChange={setPasswordWrapper}></Input>
-                                    <FormFeedback>Oh noes! that name is already taken</FormFeedback>
+                                    <Input type="password" name="password" id="examplePassword" onChange={setPasswordWrapper} invalid = {passwordError !== null }></Input>
+                                    <FormFeedback>{passwordError}</FormFeedback>
                                 </FormGroup>
-                                <Button onClick={ () => {logValues(); showError();} } >Login</Button>
+                                <Button onClick={ showError } >Login</Button>
                             </Form>
                         </CardBody>
                     </Card>
@@ -52,9 +45,8 @@ export default LoginComponent;
 LoginComponent.propTypes = {
     username: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
-    setUsername: PropTypes.func.isRequired,
-    setPassword: PropTypes.func.isRequired,
-    logValues: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
+    showError: PropTypes.func.isRequired,
 }
 
 // LoginComponent.defaultProps = {
