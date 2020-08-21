@@ -1,14 +1,16 @@
 import React from 'react';
 import { Form, Input, FormGroup, Col, Container, Row } from 'reactstrap';
+import {useSelector} from 'react-redux';
 
 const divStyle = {
     background: 'skyblue',
     padding: 20,
     textAlign: 'center'
 };
-let Header = () => {
+let DashboardComponent = ({userDetails}) => {
     return (
         <>
+        <h4>Username: {userDetails.full_name}</h4>
         <div style = {divStyle}>
             <h1>DISCOVER PROJECTS</h1>
             <h6 style = {{color: 'maroon'}}>16098 public projects to discover</h6>
@@ -34,4 +36,4 @@ let Header = () => {
     );
 }
 
-export default Header;
+export default DashboardComponent;

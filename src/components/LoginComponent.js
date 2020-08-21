@@ -1,13 +1,15 @@
 import React from 'react';
 import { CardBody, Container, Row, Col, Card, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
 import PropTypes from 'prop-types';
+import {LOGIN_REDUCER} from '../shared/actionConstants'
+import { setUsername, setPassword } from '../actions/loginActions';
 
 let LoginComponent = ({ dispatch, showError, passwordError, usernameError, password, username }) => {
     const setUsernameWrapper = (evt) => {
-        dispatch({type: 'setUsername', value: evt.target.value})
+        dispatch(setUsername(evt));
     };
     const setPasswordWrapper = (evt) => {
-        dispatch({type: 'setPassword', value: evt.target.value})
+        dispatch(setPassword(evt));
     };
     
     return (

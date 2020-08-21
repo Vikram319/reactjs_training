@@ -2,44 +2,51 @@ import React, { useState, useReducer } from 'react';
 import LoginComponent from '../components/LoginComponent'
 import * as yup from 'yup';
 import apiHelper from '../apis/apiHelper';
-import loginReducer from '../reducers/loginReducer'
-
-const initialState = {
-    username: '',
-    password: '',
-    usernameError: null,
-    passwordError: null
-}
+import login from '../apis/loginApi';
+import loginReducer, { initialState } from '../reducers/loginReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import { LOGIN_REDUCER } from '../shared/actionConstants'
+import { setUserDetails, loginRequest, setErrors, resetErrors } from '../actions/loginActions';
 
 const LoginContainer = () => {
 
-    const [state, dispatch] = useReducer(loginReducer, initialState);
-
-    let { username, password, usernameError, passwordError } = state;
+    const dispatch = useDispatch();
+    const result = useSelector(state => state.loginReducer);
+    const { username, password, usernameError, passwordError, userDetails } = result;
 
     let schema = yup.object().shape({
         username: yup.string().email().required(),
         password: yup.string().required(),
     });
+    function* generator() {
+        yield loginRequest({ username, password });
+    }
+
     const showError = () => {
-        dispatch({type: 'resetErrors'});
-        schema.validate({ username, password }, { abortEarly: false })
-            .then(() => {
-                apiHelper('post', 'https://api.taiga.io/api/v1/auth', { username, password, type: 'normal' })
-                    .then((response) => {
-                        console.log(response);
-                    })
-            })
-            .catch((err) => {
-                err.inner.forEach((ele) => {
-                    if (ele.path === 'username') {
-                        dispatch({ type: 'setUsernameError', value: ele.message });
-                    }
-                    if (ele.path === 'password') {
-                        dispatch({ type: 'setPasswordError', value: ele.message });
-                    }
+        dispatch(resetErrors());
+        schema.isValid({username, password})
+        .then(function(valid) {
+            if(!valid){
+                schema.validate({ username, password }, { abortEarly: false }).catch((err) => {
+                    // console.log("err--------", err)
+                    err.inner.forEach((ele) => {
+                        dispatch(setErrors(ele));
+                    });
                 });
-            });
+            }
+            else {
+                
+                dispatch(loginRequest({username, password}));
+        
+            }
+
+        })
+        
+    }
+
+    if (userDetails.auth_token) {
+        return (<Redirect to='/dashboard' />)
     }
 
     return (
